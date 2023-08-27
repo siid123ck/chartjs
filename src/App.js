@@ -1,48 +1,42 @@
-import React, {useEffect, useState } from 'react'
+import React, {useContext, useEffect, useState } from 'react'
 import './App.css'
-import { Data } from './utils/Data'
 import PieChart from './components/PieChart'
 import { CategoryScale, Chart } from 'chart.js'
 import LineChart from './components/LineChart'
-import { ethers } from 'ethers'
+import { ChartContext } from './contextApi/ChartData'
 
 Chart.register(CategoryScale)
 
 const App = () => {
-  const [baseFees, setBaseFees] = useState([])
-  const [gasRatios, setGasRatios] = useState([])
+  const {baseFees} = useContext(ChartContext);
 
+  const [chartData, setChartData] = useState({})
 
-  useEffect(()=>{
-    const fetchBaseFeeAndGasUsage = async ()=>{
-      if(window.ethereum){
-        const baseFees = [];
-        const gasRatios = [];
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const blockNumber = await provider.getBlockNumber();
-        for (let i = blockNumber-10; i < blockNumber; i++) {
-          const block = await provider.getBlock(i);
-          const baseFee = Number(block.baseFeePerGas);
-          baseFees.push(baseFee);
-
-          const gasUsed = block.gasUsed;
-          const gasLimit = block.gasLimit;
-          const gasRatio = (Number(gasUsed)/Number(gasLimit))*100;
-          gasRatios.push({blockNumber:i, gasRatio});
+    useEffect(() => {
+    setChartData({
+      labels: baseFees.map(item => item.blockNumber),
+      datasets: [
+        {
+          label: 'User gained',
+          data: baseFees.map(data => data.baseFee),
+          backgroundColor: [
+            "rgba(75,192,192,1)",
+            "#50AF95",
+            "#19AF05",
+            "#f3ba2f",
+            "#2a71d0"
+          ],
+          borderColor: "black",
+          borderWidth: 2
         }
-        setBaseFees(baseFees);
-        setGasRatios(gasRatios)
-        
-      } else{
-        console.log('metamask is not installed')
-      }
-    }
-    fetchBaseFeeAndGasUsage();
-  }, [])
+      ]
+    });
+  }, [baseFees]); 
 
   return (
     <div className='container'>
-      {gasRatios.length && <LineChart gasRatios={gasRatios}  />}
+      {baseFees.length && <LineChart chartData={chartData}  />}
+      {baseFees.length && <PieChart chartData={chartData}  />}
     </div>
   )
 }
