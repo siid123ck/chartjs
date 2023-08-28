@@ -37,7 +37,23 @@ function GasRatios({ gasRatios }) {
             legend: {
               display: false
             }
+          },
+         scales:{
+          x:{
+            title:{
+              display:true,
+              text:'Block Number',
+              color:'blue'
+            }
+          },
+          y:{
+            title:{
+              display:true,
+              text:'Gas Ratios (%)',
+              color:'green'
+            }
           }
+         } 
         }}
       />
     </div>

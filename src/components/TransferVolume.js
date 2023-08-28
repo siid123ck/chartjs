@@ -37,6 +37,22 @@ function TransferVolume({ transferVolume }) {
             legend: {
               display: false
             }
+          },
+          scales:{
+           x:{
+             title:{
+               display:true,
+               text:'Block Number',
+               color:'blue'
+             }
+           },
+           y:{
+             title:{
+               display:true,
+               text:'Total volume',
+               color:'green'
+             }
+           }
           }
         }}
       />

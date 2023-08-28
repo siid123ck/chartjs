@@ -37,7 +37,24 @@ function BaseFees({ baseFees }) {
             legend: {
               display: false
             }
+          },
+          scales:{
+           x:{
+             title:{
+               display:true,
+               text:'Block Number',
+               color:'blue'
+             }
+           },
+           y:{
+             title:{
+               display:true,
+               text:'Base Fees',
+               color:'green'
+             }
+           }
           }
+          
         }}
       />
     </div>
